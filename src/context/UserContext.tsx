@@ -33,17 +33,19 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const { addToast } = useToast();
 
-    const [userList, setUserList] = useState<IUser[]>([]);
-    const [cachedPages, setCachedPages] = useState<ICachedPage[]>([]);
-    const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
-    const [fetchingUserList, setFetchingUserList] = useState<boolean>(false);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(1);
+    const [userList, setUserList] = useState<IUser[]>([]);    // State to store the list of users
+    const [cachedPages, setCachedPages] = useState<ICachedPage[]>([]);    // State to store the cached pages
+    const [currentUserId, setCurrentUserId] = useState<number | null>(null);    // State to store the current user's ID
+    const [currentUser, setCurrentUser] = useState<IUser | null>(null);    // State to store the current user
+    const [fetchingUserList, setFetchingUserList] = useState<boolean>(false);    // State to track if the user list is being fetched
+    const [currentPage, setCurrentPage] = useState<number>(1);    // State to store the current page number
+    const [totalPages, setTotalPages] = useState<number>(1);    // State to store the total number of pages
 
+    // Functions to navigate between pages
     const nextPage = () => setCurrentPage(p => Math.min(totalPages, p + 1));
     const prevPage = () => setCurrentPage(p => Math.max(1, p - 1));
 
+    // Function to update the user list
     const updateUserList = (updatedUser: IUser) => {
         setUserList(prevList => prevList.map(user => user.id === updatedUser.id ? updatedUser : user));
         setCachedPages(prevPagesList => prevPagesList.map(cachedPage => ({
@@ -56,6 +58,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    // Function to delete a user
     const handleDeleteUser = async (userId: number) => {
         try {
             await deleteUser(userId);
@@ -77,6 +80,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         addToast("Deleted Successfully!", true);
     };
 
+    // Function to fetch users
     const fetchUsers = async () => {
         if (fetchingUserList) return;
 
@@ -104,10 +108,12 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         setFetchingUserList(false);
     };
 
+    // Effect to set the current user when the currentUserId changes
     useEffect(() => {
         setCurrentUser(userList.find(user => user.id === currentUserId) || null);
     }, [currentUserId]);
 
+    // Effect to fetch users when the current page changes
     useEffect(() => {
         fetchUsers();
     }, [currentPage]);

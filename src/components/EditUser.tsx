@@ -14,42 +14,48 @@ export default function EditUser() {
 
     const [editing, setEditing] = useState<boolean>(false);
 
+    // Refs for the input fields (firstName, lastName, email)
     const firstNameRef = useRef<HTMLInputElement>(null);
     const lastNameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
 
+    // Function to handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!currentUser || editing) return;
-
+        
         const firstName = firstNameRef.current?.value;
         const lastName = lastNameRef.current?.value;
         const email = emailRef.current?.value;
-
+        
+        // Check if any of the input fields are empty
         if (!firstName || !lastName || !email) {
             addToast("Please fill all fields", false);
             return;
         }
 
+        // Check if the input fields are the same as the current user's details
         if (firstName === currentUser.first_name && lastName === currentUser.last_name && email === currentUser.email) {
             addToast("No changes made", false);
             return;
         }
-
         setEditing(true);
 
+        // Update the user's details
         const { error: updateError } = await updateUser(currentUser.id, {
             first_name: firstName,
             last_name: lastName,
             email: email
         });
 
+        // Check if the update was successful
         if (updateError) {
             addToast(typeof updateError === "string" ? updateError : "Failed to update user", false);
             setEditing(false);
             return;
         };
 
+        // Update the user list
         updateUserList({
             id: currentUser.id,
             avatar: currentUser.avatar,
@@ -58,6 +64,7 @@ export default function EditUser() {
             email: email
         });
 
+        // Show a success message and navigate to the user list page
         addToast("Updated Successfully!", true);
         navigate("/user-list");
     };

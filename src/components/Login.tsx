@@ -5,12 +5,15 @@ import { Button, Input, Loader } from "./Reusables";
 
 export default function Login() {
 
+    // State to track if the user is logging in
     const [loggingIn, setLoggingIn] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
+    // Refs for the input fields (email, password)
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
+    // Function to handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (loggingIn) return;
@@ -20,6 +23,7 @@ export default function Login() {
         const email = emailRef.current?.value;
         const password = passwordRef.current?.value;
 
+        // Check if any of the input fields are empty
         if (!email || !password) {
             setError("Please enter email and password");
             setLoggingIn(false);
@@ -31,7 +35,7 @@ export default function Login() {
         if (error) {
             setError(typeof (error) === "string" ? error : "An error occurred");
         } else {
-            console.log(data);
+            // Check if the response contains an error or if the token is missing
             if (data?.error || !data?.token) {
                 setError(data?.error || "An error occurred");
             } else {

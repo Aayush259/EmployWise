@@ -9,8 +9,10 @@ import { ToastProvider } from "./context/ToastContext";
 
 export default function App() {
 
+    // State to track if the user is logged in
     const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 
+    // Check if the user is logged in on component mount
     useEffect(() => {
         setLoggedIn((getToken() ? true : false));
     }, []);

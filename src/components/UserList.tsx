@@ -9,9 +9,11 @@ export default function UserList() {
 
     const navigate = useNavigate();
     const { userList, fetchingUserList, currentPage, totalPages, setCurrentUserId, nextPage, prevPage, deleteUser } = useUser();
-    const [searchTerm, setSearchTerm] = useState("");
-    const [deletingId, setDeletingId] = useState<number | null>(null);
 
+    const [searchTerm, setSearchTerm] = useState("");    // State to track the search term
+    const [deletingId, setDeletingId] = useState<number | null>(null);    // State to track the user being deleted
+
+    // Filter the user list based on the search term
     const filteredUsers = userList.filter(user => {
         const searchLower = searchTerm.toLowerCase();
         return (
@@ -21,6 +23,7 @@ export default function UserList() {
         );
     });
 
+    // Function to handle the edit button click
     const handleDelete = async (userId: number) => {
         setDeletingId(userId);
         await deleteUser(userId);
