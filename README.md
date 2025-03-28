@@ -25,3 +25,21 @@ This project is a user management system which allows users to authenticate, vie
 - TailwindCSS
 - React Icons
 - Vite
+
+## 🚀 Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/employwise.git
+cd employwise
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
