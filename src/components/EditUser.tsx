@@ -1,6 +1,6 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
-import { Button, Input } from "./Reusables";
+import { Button, Input, Loader } from "./Reusables";
 import { IoArrowBack } from "react-icons/io5";
 import { useRef, useState } from "react";
 import { updateUser } from "../utils/apis";
@@ -102,7 +102,7 @@ export default function EditUser() {
                 />
 
                 <Button className="w-full mt-6" type="submit" disabled={editing}>
-                    {editing ? "Editing..." : "Update"}
+                    {editing ? <Loader /> : "Update"}
                 </Button>
             </form>
         </div>

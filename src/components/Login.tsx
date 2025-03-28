@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import login from "../utils/apis";
 import { setToken } from "../utils/funcs";
-import { Button, Input } from "./Reusables";
+import { Button, Input, Loader } from "./Reusables";
 
 export default function Login() {
 
@@ -68,7 +68,11 @@ export default function Login() {
                     />
 
                     <div className="mt-6">
-                        <Button type="submit" className="w-full" disabled={loggingIn}>Login</Button>
+                        <Button type="submit" className="w-full" disabled={loggingIn}>
+                            {
+                                loggingIn ? <Loader /> : "Login"
+                            }
+                        </Button>
                     </div>
                 </form>
             </div>

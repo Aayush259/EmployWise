@@ -1,11 +1,13 @@
 import { FiLoader } from "react-icons/fi";
 import { IButtonProps, IInputProps } from "../utils/interfaces";
 
-export const Loader = () => {
+export const Loader: React.FC<{
+    className?: string;
+}> = ({ className }) => {
 
     return (
         <div>
-            <FiLoader size={40} className="animate-spin mx-auto" />
+            <FiLoader size={20} className={`animate-spin mx-auto ${className}`} />
         </div>
     );
 };
@@ -26,9 +28,11 @@ export const Input: React.FC<IInputProps> = ({ id, label, className, containerCl
 
     return (
         <div className={`mt-4 ${containerClassName}`}>
-            <label htmlFor={id} className="block font-medium">
-                {label}
-            </label>
+            {
+                label && <label htmlFor={id} className="block font-medium">
+                    {label}
+                </label>
+            }
 
             <input ref={reference} id={id} className={`block duration-300 outline-none mt-1 p-2 w-full rounded-md bg-gray-800 shadow-in ${className}`} {...props} />
         </div>

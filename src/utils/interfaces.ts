@@ -32,8 +32,8 @@ export interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 
 export interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     id: string;
-    label: string;
+    label?: string;
     className?: string;
     containerClassName?: string;
-    reference: React.RefObject<HTMLInputElement>;
+    reference?: React.RefObject<HTMLInputElement>;
 };
