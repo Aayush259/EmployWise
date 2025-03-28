@@ -13,3 +13,16 @@ body {
     inset -2px 2px 0 #3b82f6,
     inset 2px -2px 0 #3b82f6;
 }
+
+@keyframes toast {
+    0% {
+        width: 100%;
+    }
+    100% {
+        width: 0%;
+    }
+}
+
+.animate-toast {
+    animation: toast 4s linear forwards;
+}
