@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import login from "../utils/apis";
 import { setToken } from "../utils/funcs";
 import { useNavigate } from "react-router-dom";
+import { Button } from "./Reusables";
 
 export default function Login() {
 
@@ -64,7 +65,7 @@ export default function Login() {
                     </div>
 
                     <div className="mt-6">
-                        <button type="submit" className="w-full p-2 disabled:opacity-70 disabled:cursor-default cursor-pointer bg-blue-500 rounded-md" disabled={loggingIn}>Login</button>
+                        <Button type="submit" className="w-full" disabled={loggingIn}>Login</Button>
                     </div>
                 </form>
             </div>
