@@ -44,3 +44,17 @@ export default async function login({
 export async function getUsers(page: number = 1) {
     return await fetchApi(`/api/users?page=${page}`);
 };
+
+export async function updateUser(id: number, data: {
+    email: string;
+    first_name: string;
+    last_name: string;
+}) {
+    return await fetchApi(`/api/users/${id}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+};

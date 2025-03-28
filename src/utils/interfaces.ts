@@ -14,7 +14,20 @@ export interface IUserResponse {
     data: IUser[];
 };
 
+export interface ICachedPage {
+    page: number;
+    users: IUser[];
+};
+
 export interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
     className?: string;
+};
+
+export interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    id: string;
+    label: string;
+    className?: string;
+    containerClassName?: string;
+    reference: React.RefObject<HTMLInputElement>;
 };
