@@ -1,8 +1,7 @@
 import { useRef, useState } from "react";
 import login from "../utils/apis";
 import { setToken } from "../utils/funcs";
-import { useNavigate } from "react-router-dom";
-import { Button } from "./Reusables";
+import { Button, Input } from "./Reusables";
 
 export default function Login() {
 
@@ -11,8 +10,6 @@ export default function Login() {
 
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
-
-    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,7 +36,7 @@ export default function Login() {
                 setError(data?.error || "An error occurred");
             } else {
                 setToken(data?.token);
-                navigate("/");
+                window.location.href = "/";
             }
         }
         setLoggingIn(false);
@@ -54,15 +51,21 @@ export default function Login() {
                 </div>
 
                 <form className="mt-6" onSubmit={handleSubmit}>
-                    <div className="mt-4">
-                        <label htmlFor="email" className="block font-medium">Email</label>
-                        <input ref={emailRef} type="email" id="email" name="email" className="mt-1 p-2 w-full rounded-md bg-gray-800" />
-                    </div>
+                    <Input
+                        id="email"
+                        label="Email"
+                        type="email"
+                        name="email"
+                        reference={emailRef as React.RefObject<HTMLInputElement>}
+                    />
 
-                    <div className="mt-4">
-                        <label htmlFor="password" className="block font-medium">Password</label>
-                        <input ref={passwordRef} type="password" id="password" name="password" className="mt-1 p-2 w-full rounded-md bg-gray-800" />
-                    </div>
+                    <Input
+                        id="password"
+                        label="Password"
+                        type="password"
+                        name="password"
+                        reference={passwordRef as React.RefObject<HTMLInputElement>}
+                    />
 
                     <div className="mt-6">
                         <Button type="submit" className="w-full" disabled={loggingIn}>Login</Button>
