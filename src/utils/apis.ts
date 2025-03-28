@@ -60,5 +60,7 @@ export async function updateUser(id: number, data: {
 };
 
 export async function deleteUser(id: number) {
-    return await fetchApi(`/api/users/${id}`);
+    return await fetchApi(`/api/users/${id}`, {
+        method: "DELETE",
+    });
 };

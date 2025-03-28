@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import UserList from "./components/UserList";
 import EditUser from "./components/EditUser";
 import { UserContextProvider } from "./context/UserContext";
+import { ToastProvider } from "./context/ToastContext";
 
 export default function App() {
 
@@ -35,12 +36,14 @@ export default function App() {
                 path="*"
                 element={
                     <ProtectedRoute>
-                        <UserContextProvider>
-                            <Routes>
-                                <Route path="user-list" element={<UserList />} />
-                                <Route path="edit" element={<EditUser />} />
-                            </Routes>
-                        </UserContextProvider>
+                        <ToastProvider>
+                            <UserContextProvider>
+                                <Routes>
+                                    <Route path="user-list" element={<UserList />} />
+                                    <Route path="edit" element={<EditUser />} />
+                                </Routes>
+                            </UserContextProvider>
+                        </ToastProvider>
                     </ProtectedRoute>
                 } />
         </Routes>

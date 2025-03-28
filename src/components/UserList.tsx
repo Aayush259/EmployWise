@@ -7,17 +7,11 @@ import { useNavigate } from "react-router-dom";
 export default function UserList() {
 
     const navigate = useNavigate();
-    const { userList, fetchingUserList, currentPage, totalPages, error, setCurrentUserId, nextPage, prevPage, deleteUser } = useUser();
+    const { userList, fetchingUserList, currentPage, totalPages, setCurrentUserId, nextPage, prevPage, deleteUser } = useUser();
 
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-xl md:text-3xl text-center font-bold mb-6">{"User List"}</h1>
-
-            {
-                error && (
-                    <div className="text-red-500 mb-4 text-sm">{error}</div>
-                )
-            }
 
             {
                 (fetchingUserList && userList.length === 0) ? <Loader /> : (

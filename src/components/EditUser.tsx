@@ -4,14 +4,15 @@ import { Button, Input } from "./Reusables";
 import { IoArrowBack } from "react-icons/io5";
 import { useRef, useState } from "react";
 import { updateUser } from "../utils/apis";
+import { useToast } from "../context/ToastContext";
 
 export default function EditUser() {
 
     const navigate = useNavigate();
+    const { addToast } = useToast();
     const { currentUser, updateUserList } = useUser();
 
     const [editing, setEditing] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
 
     const firstNameRef = useRef<HTMLInputElement>(null);
     const lastNameRef = useRef<HTMLInputElement>(null);
@@ -26,28 +27,25 @@ export default function EditUser() {
         const email = emailRef.current?.value;
 
         if (!firstName || !lastName || !email) {
-            setError("Please fill all fields");
+            addToast("Please fill all fields", false);
             return;
         }
 
         if (firstName === currentUser.first_name && lastName === currentUser.last_name && email === currentUser.email) {
-            setError("No changes made");
+            addToast("No changes made", false);
             return;
         }
 
         setEditing(true);
-        setError(null);
 
-        const { data, error: updateError } = await updateUser(currentUser.id, {
+        const { error: updateError } = await updateUser(currentUser.id, {
             first_name: firstName,
             last_name: lastName,
             email: email
         });
 
-        console.log(data);
-
         if (updateError) {
-            setError(typeof updateError === "string" ? updateError : "Failed to update user");
+            addToast(typeof updateError === "string" ? updateError : "Failed to update user", false);
             setEditing(false);
             return;
         };
@@ -60,6 +58,7 @@ export default function EditUser() {
             email: email
         });
 
+        addToast("Updated Successfully!", true);
         navigate("/user-list");
     };
 
@@ -76,7 +75,6 @@ export default function EditUser() {
             <form className="w-[550px] max-w-[95vw] bg-[#131212] p-4 rounded-2xl" onSubmit={handleSubmit}>
                 <div className="flex items-end justify-between flex-wrap">
                     <h2 className="text-xl md:text-2xl">{"Edit User"}</h2>
-                    {error && <div className="text-red-500 text-sm">{error}</div>}
                 </div>
 
                 <Input

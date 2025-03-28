@@ -1,13 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ICachedPage, IUser, IUserResponse } from "../utils/interfaces";
 import { getUsers, deleteUser } from "../utils/apis";
+import { useToast } from "./ToastContext";
 
 const UserContext = createContext<{
     userList: IUser[];
     currentUser: IUser | null;
     currentUserId: number | null;
     fetchingUserList: boolean;
-    error: string | null;
     currentPage: number;
     totalPages: number;
     setCurrentUserId: React.Dispatch<React.SetStateAction<number | null>>;
@@ -20,7 +20,6 @@ const UserContext = createContext<{
     currentUser: null,
     currentUserId: null,
     fetchingUserList: false,
-    error: null,
     currentPage: 1,
     totalPages: 1,
     setCurrentUserId: () => { },
@@ -32,12 +31,13 @@ const UserContext = createContext<{
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
+    const { addToast } = useToast();
+
     const [userList, setUserList] = useState<IUser[]>([]);
     const [cachedPages, setCachedPages] = useState<ICachedPage[]>([]);
     const [currentUserId, setCurrentUserId] = useState<number | null>(null);
     const [currentUser, setCurrentUser] = useState<IUser | null>(null);
     const [fetchingUserList, setFetchingUserList] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
 
@@ -53,11 +53,10 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const handleDeleteUser = async (userId: number) => {
-        const { error } = await deleteUser(userId);
-
-        if (error) {
-            setError(typeof error === "string" ? error : "Failed to delete user");
-            return { success: false, error: "Failed to delete user" };
+        try {
+            await deleteUser(userId);
+        } catch (error) {
+            addToast("Failed to Delete User", false);
         }
 
         // Remove user from current list
@@ -70,6 +69,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
                 users: cachedPage.users.filter(user => user.id !== userId)
             }))
         );
+
+        addToast("Deleted Successfully!", true);
 
         return { success: true, error: null };
     };
@@ -88,7 +89,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         const { data, error } = await getUsers(currentPage);
 
         if (error) {
-            setError(typeof error === "string" ? error : "Failed to fetch users");
+            addToast(typeof error === "string" ? error : "Failed to fetch users", false);
         } else {
             const userData = data as IUserResponse;
             setUserList(userData.data);
@@ -97,7 +98,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
                 page: userData.page,
                 users: userData.data
             }]);
-            setError(null);
         }
         setFetchingUserList(false);
     };
@@ -116,7 +116,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
             currentUser,
             currentUserId,
             fetchingUserList,
-            error,
             currentPage,
             totalPages,
             setCurrentUserId,

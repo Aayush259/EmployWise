@@ -19,6 +19,12 @@ export interface ICachedPage {
     users: IUser[];
 };
 
+export interface IToast {
+    id: string;
+    message: string;
+    success: boolean;
+};
+
 export interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
     className?: string;
