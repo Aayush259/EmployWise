@@ -1,12 +1,13 @@
 import { useUser } from "../context/UserContext";
 import { GoPencil } from "react-icons/go";
+import { MdDelete } from "react-icons/md";
 import { Button, Loader } from "./Reusables";
 import { useNavigate } from "react-router-dom";
 
 export default function UserList() {
 
     const navigate = useNavigate();
-    const { userList, fetchingUserList, currentPage, totalPages, error, setCurrentUserId, nextPage, prevPage } = useUser();
+    const { userList, fetchingUserList, currentPage, totalPages, error, setCurrentUserId, nextPage, prevPage, deleteUser } = useUser();
 
     return (
         <div className="container mx-auto p-4">
@@ -25,15 +26,26 @@ export default function UserList() {
                             {
                                 userList.map((user) => (
                                     <div key={user.id} className="bg-gray-800 rounded-lg p-4 flex flex-col items-center group relative shadow-in duration-300">
-                                        <button
-                                            className="opacity-0 group-hover:opacity-100 duration-200 absolute top-4 right-4 cursor-pointer hover:opacity-60"
-                                            onClick={() => {
-                                                navigate("/edit");
-                                                setCurrentUserId(user.id)
-                                            }}
-                                        >
-                                            <GoPencil size={20} />
-                                        </button>
+                                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 duration-200 flex items-center gap-2">
+                                            <button
+                                                className="cursor-pointer hover:text-red-500"
+                                                onClick={() => {
+                                                    deleteUser(user.id)
+                                                }}
+                                            >
+                                                <MdDelete size={20} />
+                                            </button>
+                                            <button
+                                                className="cursor-pointer hover:opacity-60"
+                                                onClick={() => {
+                                                    navigate("/edit");
+                                                    setCurrentUserId(user.id)
+                                                }}
+                                            >
+                                                <GoPencil size={20} />
+                                            </button>
+                                        </div>
+
                                         <img
                                             src={user.avatar}
                                             alt={`${user.first_name} ${user.last_name}`}

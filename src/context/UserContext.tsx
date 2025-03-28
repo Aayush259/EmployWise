@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ICachedPage, IUser, IUserResponse } from "../utils/interfaces";
-import { getUsers } from "../utils/apis";
+import { getUsers, deleteUser } from "../utils/apis";
 
 const UserContext = createContext<{
     userList: IUser[];
@@ -14,6 +14,7 @@ const UserContext = createContext<{
     nextPage: () => void;
     prevPage: () => void;
     updateUserList: (updatedUser: IUser) => void;
+    deleteUser: (userId: number) => Promise<{ success: boolean; error: string | null }>;
 }>({
     userList: [],
     currentUser: null,
@@ -26,6 +27,7 @@ const UserContext = createContext<{
     nextPage: () => { },
     prevPage: () => { },
     updateUserList: () => { },
+    deleteUser: async () => ({ success: false, error: null }),
 });
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -48,6 +50,28 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
             ...cachedPage,
             users: cachedPage.users.map(user => user.id === updatedUser.id ? updatedUser : user)
         })))
+    };
+
+    const handleDeleteUser = async (userId: number) => {
+        const { error } = await deleteUser(userId);
+
+        if (error) {
+            setError(typeof error === "string" ? error : "Failed to delete user");
+            return { success: false, error: "Failed to delete user" };
+        }
+
+        // Remove user from current list
+        setUserList(prevList => prevList.filter(user => user.id !== userId));
+
+        // Remove user from cached pages
+        setCachedPages(prevCache =>
+            prevCache.map(cachedPage => ({
+                ...cachedPage,
+                users: cachedPage.users.filter(user => user.id !== userId)
+            }))
+        );
+
+        return { success: true, error: null };
     };
 
     const fetchUsers = async () => {
@@ -99,6 +123,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
             nextPage,
             prevPage,
             updateUserList,
+            deleteUser: handleDeleteUser,
         }}>
             {children}
         </UserContext.Provider>
