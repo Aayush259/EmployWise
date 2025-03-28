@@ -1,4 +1,3 @@
-
 const BASE_URL = "https://reqres.in"
 
 async function fetchApi(url: string, options?: RequestInit) {
@@ -42,3 +41,6 @@ export default async function login({
     });
 };
 
+export async function getUsers(page: number = 1) {
+    return await fetchApi(`/api/users?page=${page}`);
+};
