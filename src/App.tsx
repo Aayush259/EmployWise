@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { getToken } from "./utils/funcs";
 import Login from "./components/Login";
 import UserList from "./components/UserList";
+import EditUser from "./components/EditUser";
 import { UserContextProvider } from "./context/UserContext";
 
 export default function App() {
@@ -12,6 +13,10 @@ export default function App() {
     useEffect(() => {
         setLoggedIn((getToken() ? true : false));
     }, []);
+
+    const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+        return loggedIn ? children : <Navigate to="/login" />;
+    };
 
     if (loggedIn === null) return null;
 
@@ -25,14 +30,19 @@ export default function App() {
                 path="/login"
                 element={loggedIn ? <Navigate to="/user-list" /> : <Login />}
             />
+
             <Route
-                path="/user-list"
+                path="*"
                 element={
-                    <UserContextProvider>
-                        <UserList />
-                    </UserContextProvider>
-                }
-            />
+                    <ProtectedRoute>
+                        <UserContextProvider>
+                            <Routes>
+                                <Route path="user-list" element={<UserList />} />
+                                <Route path="edit" element={<EditUser />} />
+                            </Routes>
+                        </UserContextProvider>
+                    </ProtectedRoute>
+                } />
         </Routes>
     );
-};
+}
