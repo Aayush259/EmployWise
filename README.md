@@ -1,6 +1,6 @@
 # EmployWise User Management System
 
-This project is a user management system built as a take-home assignment for an EmployWise internship. The application allows users to authenticate, view, update, and delete user records through a clean and responsive interface built with React, TypeScript, and Tailwind CSS.
+This project is a user management system which allows users to authenticate, view, update, and delete user records through a clean and responsive interface built with React, TypeScript, and Tailwind CSS.
 
 ## 🌟 Features
 
