@@ -14,7 +14,7 @@ const UserContext = createContext<{
     nextPage: () => void;
     prevPage: () => void;
     updateUserList: (updatedUser: IUser) => void;
-    deleteUser: (userId: number) => Promise<{ success: boolean; error: string | null }>;
+    deleteUser: (userId: number) => Promise<void>;
 }>({
     userList: [],
     currentUser: null,
@@ -26,7 +26,7 @@ const UserContext = createContext<{
     nextPage: () => { },
     prevPage: () => { },
     updateUserList: () => { },
-    deleteUser: async () => ({ success: false, error: null }),
+    deleteUser: async () => { },
 });
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -49,7 +49,11 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         setCachedPages(prevPagesList => prevPagesList.map(cachedPage => ({
             ...cachedPage,
             users: cachedPage.users.map(user => user.id === updatedUser.id ? updatedUser : user)
-        })))
+        })));
+
+        if (currentUser?.id === updatedUser.id) {
+            setCurrentUser(updatedUser);
+        }
     };
 
     const handleDeleteUser = async (userId: number) => {
@@ -71,8 +75,6 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         );
 
         addToast("Deleted Successfully!", true);
-
-        return { success: true, error: null };
     };
 
     const fetchUsers = async () => {
