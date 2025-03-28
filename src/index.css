@@ -6,3 +6,10 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+.shadow-in:hover {
+    box-shadow: inset 4px 4px 0 #3b82f6,
+    inset -4px -4px 0 #3b82f6,
+    inset -4px 4px 0 #3b82f6,
+    inset 4px -4px 0 #3b82f6;
+}
